@@ -4,11 +4,12 @@ const endTime = document.querySelector('.display__end-time');
 const buttons = document.querySelectorAll('[data-time]');
 
 function timer(seconds) {
+  clearInterval(countdown);
   const now = Date.now();
   const then = now + seconds * 1000;
   displayTimeLeft(seconds);
   displayEndTime(then);
-  setInterval(() => {
+  countdown = setInterval(() => {
     const secondsLeft = Math.round((then - Date.now()) / 1000);
     // check to stop
     if (secondsLeft < 0) {
@@ -39,3 +40,18 @@ function displayEndTime(timestamp) {
     minutes < 10 ? '0' : ''
   }${minutes}`;
 }
+
+function startTimer() {
+  const seconds = parseInt(this.dataset.time);
+  timer(seconds);
+  console.log(this.dataset.time);
+}
+
+buttons.forEach(button => button.addEventListener('click', startTimer));
+
+document.customForm.addEventListener('submit', function(e) {
+  e.preventDefault();
+  const mins = this.minutes.value;
+  this.reset();
+  timer(mins * 60);
+});
